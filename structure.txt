@@ -1,0 +1,82 @@
+## 📁 FULL PROJECT STRUCTURE
+```
+grindOS/
+│
+├── src/
+│   ├── main.tsx
+│   ├── App.tsx
+│   │
+│   ├── components/
+│   │   ├── ui/                   # Base: Button, Input, Badge, Modal
+│   │   ├── TaskCard.tsx
+│   │   ├── SprintCard.tsx
+│   │   ├── RatingBadge.tsx
+│   │   ├── CommandPalette.tsx
+│   │   ├── ProgressBar.tsx
+│   │   └── Charts/
+│   │       ├── RatingGraph.tsx
+│   │       ├── ActivityHeatmap.tsx
+│   │       └── SprintChart.tsx
+│   │
+│   ├── pages/
+│   │   ├── Dashboard.tsx         # Main widget view
+│   │   ├── Tasks.tsx
+│   │   ├── Sprint.tsx
+│   │   ├── Backlog.tsx
+│   │   ├── Profile.tsx           # Rating + rank
+│   │   ├── Analytics.tsx
+│   │   └── Settings.tsx
+│   │
+│   ├── engines/                  # Pure TypeScript business logic
+│   │   ├── ratingEngine.ts       # Elo calculations
+│   │   ├── sprintEngine.ts       # Sprint scoring
+│   │   ├── gamificationEngine.ts # XP, streaks, achievements
+│   │   └── analyticsEngine.ts
+│   │
+│   ├── commands/
+│   │   ├── registry.ts           # All Ctrl+Space commands here
+│   │   ├── taskCommands.ts
+│   │   ├── sprintCommands.ts
+│   │   └── systemCommands.ts
+│   │
+│   ├── store/                    # Zustand
+│   │   ├── taskStore.ts
+│   │   ├── sprintStore.ts
+│   │   ├── ratingStore.ts
+│   │   └── uiStore.ts
+│   │
+│   ├── hooks/
+│   │   ├── useTasks.ts
+│   │   ├── useSprint.ts
+│   │   ├── useRating.ts
+│   │   └── useKeyboard.ts
+│   │
+│   └── lib/
+│       ├── db.ts                 # Tauri invoke() wrappers
+│       ├── dateUtils.ts
+│       ├── formatters.ts
+│       └── constants.ts          # Rank tiers, colors, K-factors
+│
+├── src-tauri/
+│   ├── src/
+│   │   ├── main.rs
+│   │   ├── lib.rs
+│   │   ├── commands/
+│   │   │   ├── mod.rs
+│   │   │   ├── tasks.rs
+│   │   │   ├── sprints.rs
+│   │   │   ├── ratings.rs
+│   │   │   └── analytics.rs
+│   │   └── db/
+│   │       ├── mod.rs
+│   │       ├── schema.rs         # DB init + migrations
+│   │       └── models.rs
+│   ├── tauri.conf.json
+│   └── Cargo.toml
+│
+├── migrations/
+│   ├── 001_initial.sql
+│   ├── 002_sprints.sql
+│   └── 003_ratings.sql
+│
+└── .config/autostart/grindOS.desktop
