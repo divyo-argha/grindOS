@@ -1,51 +1,41 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useUIStore } from "./store/uiStore";
+import { Dashboard } from "./pages/Dashboard";
+import { Profile } from "./pages/Profile";
+import { CommandPalette } from "./components/CommandPalette";
+import { AddTaskModal } from "./components/AddTaskModal";
+import { Notification } from "./components/Notification";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
+// Lazy import other pages to keep it simple for now
+function PlaceholderPage({ name }: { name: string }) {
+  const { setView } = useUIStore();
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+    <div className="flex flex-col items-center justify-center h-full gap-4 text-slate-500">
+      <div className="text-4xl">🚧</div>
+      <div className="text-sm">{name} — coming soon</div>
+      <button onClick={() => setView("dashboard")} className="text-xs text-blue-400 hover:underline">← Dashboard</button>
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  const { currentView } = useUIStore();
+
+  const views: Record<string, JSX.Element> = {
+    dashboard: <Dashboard />,
+    profile: <Profile />,
+    tasks: <PlaceholderPage name="All Tasks" />,
+    sprint: <PlaceholderPage name="Sprint View" />,
+    backlog: <PlaceholderPage name="Backlog" />,
+    analytics: <PlaceholderPage name="Analytics" />,
+    settings: <PlaceholderPage name="Settings" />,
+  };
+
+  return (
+    <div className="h-screen w-screen bg-surface-0 overflow-hidden dark flex flex-col">
+      {views[currentView] || <Dashboard />}
+      <CommandPalette />
+      <AddTaskModal />
+      <Notification />
+    </div>
+  );
+}

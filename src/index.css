@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    font-family: 'JetBrains Mono', monospace;
+    color: #e2e8f0;
+    user-select: none;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111118;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333340;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555565;
+}
+
+.rank-dumb {
+    color: #808080;
+}
+
+.rank-procrastinator {
+    color: #555555;
+}
+
+.rank-lazy {
+    color: #8B4513;
+}
+
+.rank-newbie {
+    color: #22c55e;
+}
+
+.rank-pupil {
+    color: #06b6d4;
+}
+
+.rank-specialist {
+    color: #3b82f6;
+}
+
+.rank-expert {
+    color: #a855f7;
+}
+
+.rank-candidate {
+    color: #ec4899;
+}
+
+.rank-master {
+    color: #f97316;
+}
+
+.rank-legend {
+    color: #ef4444;
+}
+
+.rank-god {
+    color: #FFD700;
+    text-shadow: 0 0 10px #FFD700;
+}
