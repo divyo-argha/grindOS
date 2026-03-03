@@ -41,19 +41,32 @@ export const useSprintStore = create<SprintStore>((set, get) => ({
     },
 
     fetchActiveSprint: async () => {
-        const sprint = await db.getActiveSprint();
-        set({ activeSprint: sprint });
+        try {
+            const sprint = await db.getActiveSprint();
+            console.log("Fetched active sprint:", sprint);
+            set({ activeSprint: sprint });
+        } catch (error) {
+            console.error("Failed to fetch active sprint:", error);
+        }
     },
 
     createSprint: async (data) => {
-        const difficulty = calculateSprintDifficulty(
-            data.maximum_possible_xp,
-            data.taskCount || 0,
-            data.daysAvailable || 7
-        );
-        await db.createSprint({ ...data, difficulty_rating: difficulty });
-        await get().fetchActiveSprint();
-        await get().fetchSprints();
+        try {
+            console.log("Creating sprint with data:", data);
+            const difficulty = calculateSprintDifficulty(
+                data.maximum_possible_xp,
+                data.taskCount || 0,
+                data.daysAvailable || 7
+            );
+            console.log("Calculated difficulty:", difficulty);
+            await db.createSprint({ ...data, difficulty_rating: difficulty });
+            console.log("Sprint created in DB");
+            await get().fetchActiveSprint();
+            await get().fetchSprints();
+        } catch (error) {
+            console.error("Failed to create sprint:", error);
+            throw error;
+        }
     },
 
     completeSprint: async (sprintId, earnedXP, userRating) => {

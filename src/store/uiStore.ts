@@ -7,12 +7,14 @@ interface UIStore {
     commandOpen: boolean;
     addTaskOpen: boolean;
     addSprintOpen: boolean;
+    sprintSummaryOpen: boolean;
     selectedTaskId: number | null;
     notification: { message: string; type: "success" | "error" | "info" } | null;
     setView: (view: View) => void;
     setCommandOpen: (open: boolean) => void;
     setAddTaskOpen: (open: boolean) => void;
     setAddSprintOpen: (open: boolean) => void;
+    setSprintSummaryOpen: (open: boolean) => void;
     setSelectedTask: (id: number | null) => void;
     showNotification: (message: string, type?: "success" | "error" | "info") => void;
 }
@@ -22,6 +24,7 @@ export const useUIStore = create<UIStore>((set) => ({
     commandOpen: false,
     addTaskOpen: false,
     addSprintOpen: false,
+    sprintSummaryOpen: false,
     selectedTaskId: null,
     notification: null,
 
@@ -29,6 +32,7 @@ export const useUIStore = create<UIStore>((set) => ({
     setCommandOpen: (open) => set({ commandOpen: open }),
     setAddTaskOpen: (open) => set({ addTaskOpen: open }),
     setAddSprintOpen: (open) => set({ addSprintOpen: open }),
+    setSprintSummaryOpen: (open) => set({ sprintSummaryOpen: open }),
     setSelectedTask: (id) => set({ selectedTaskId: id }),
     showNotification: (message, type = "info") => {
         set({ notification: { message, type } });

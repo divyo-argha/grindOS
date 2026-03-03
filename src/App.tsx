@@ -1,8 +1,11 @@
 import { useUIStore } from "./store/uiStore";
 import { Dashboard } from "./pages/Dashboard";
 import { Profile } from "./pages/Profile";
+import { Sprint } from "./pages/Sprint";
 import { CommandPalette } from "./components/CommandPalette";
 import { AddTaskModal } from "./components/AddTaskModal";
+import { CreateSprintModal } from "./components/CreateSprintModal";
+import { SprintSummaryModal } from "./components/SprintSummaryModal";
 import { Notification } from "./components/Notification";
 
 // Lazy import other pages to keep it simple for now
@@ -24,7 +27,7 @@ export default function App() {
     dashboard: <Dashboard />,
     profile: <Profile />,
     tasks: <PlaceholderPage name="All Tasks" />,
-    sprint: <PlaceholderPage name="Sprint View" />,
+    sprint: <Sprint />,
     backlog: <PlaceholderPage name="Backlog" />,
     analytics: <PlaceholderPage name="Analytics" />,
     settings: <PlaceholderPage name="Settings" />,
@@ -35,6 +38,8 @@ export default function App() {
       {views[currentView] || <Dashboard />}
       <CommandPalette />
       <AddTaskModal />
+      <CreateSprintModal />
+      <SprintSummaryModal />
       <Notification />
     </div>
   );
