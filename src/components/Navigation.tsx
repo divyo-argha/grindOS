@@ -4,33 +4,46 @@ import { useUIStore } from "../store/uiStore";
 export function Navigation() {
     const { setView, setAddTaskOpen, currentView } = useUIStore();
 
+    const navItems = [
+        { id: "dashboard", icon: Layout, label: "Neural Net", color: "text-indigo-400" },
+        { id: "sprint", icon: Zap, label: "Focus Burst", color: "text-orange-400" },
+        { id: "profile", icon: User, label: "Identity", color: "text-purple-400" },
+        { id: "analytics", icon: TrendingUp, label: "Intel", color: "text-pink-400" }
+    ];
+
     return (
-        <div className="px-6 py-6 glass-morphism border-t border-white/5 flex items-center justify-between gap-4">
+        <div className="px-6 py-6 glass-morphism border-t border-white/10 flex items-center justify-between gap-5 relative">
             <button
                 onClick={() => setAddTaskOpen(true)}
-                className="flex-1 flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-2xl font-black text-xs shadow-xl shadow-indigo-500/20 transition-all active:scale-95 group shimmer-hover relative overflow-hidden"
+                className="flex-1 flex items-center justify-center gap-3 premium-btn !rounded-2xl !py-4 shadow-lg group relative overflow-hidden active:scale-95"
             >
-                <Plus size={18} className="group-hover:rotate-90 transition-transform" />
-                ADD OBJECTIVE
+                <Plus size={18} className="group-hover:rotate-90 transition-transform duration-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em]">Injest Objective</span>
+                <div className="absolute inset-x-0 bottom-0 h-0.5 bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-700" />
             </button>
 
-            <div className="flex gap-2">
-                {[
-                    { id: "dashboard", icon: Layout, color: "#818cf8", label: "Home" },
-                    { id: "sprint", icon: Zap, color: "#818cf8", label: "Sprint" },
-                    { id: "profile", icon: User, color: "#a78bfa", label: "Profile" },
-                    { id: "analytics", icon: TrendingUp, color: "#f472b6", label: "Intel" }
-                ].map(nav => {
+            <div className="flex gap-2.5">
+                {navItems.map(nav => {
                     const isActive = currentView === nav.id;
                     return (
                         <button
                             key={nav.id}
                             onClick={() => setView(nav.id as any)}
-                            className={`p-4 rounded-2xl transition-all hover:scale-105 active:scale-90 relative ${isActive ? "text-indigo-400 glass-card border-white/10 active-nav-bg shadow-lg" : "text-slate-500 hover:text-slate-300"}`}
+                            className={`p-4 rounded-[1.25rem] transition-all duration-300 relative group active:scale-90 ${isActive
+                                ? "bg-white/5 border border-white/10 shadow-lg shadow-black/20"
+                                : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.02]"}`}
                             title={nav.label}
                         >
-                            <nav.icon size={18} className={isActive ? "animate-pulse" : ""} />
-                            {isActive && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-indigo-400 rounded-full blur-[1px]" />}
+                            <nav.icon
+                                size={18}
+                                className={`transition-all duration-500 ${isActive ? `${nav.color} animate-pulse scale-110` : "group-hover:scale-110"}`}
+                            />
+                            {isActive && (
+                                <>
+                                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full blur-[2px] animate-pulse" style={{ backgroundColor: 'currentColor' }} />
+                                    <div className="absolute inset-0 bg-white/[0.02] rounded-[1.25rem] animate-fade-in" />
+                                </>
+                            )}
                         </button>
                     );
                 })}

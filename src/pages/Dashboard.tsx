@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { TrendingUp, Plus, Layout, Trophy } from "lucide-react";
+import { Plus, Trophy, Zap, ChevronRight } from "lucide-react";
 import { useTaskStore } from "../store/taskStore";
 import { useSprintStore } from "../store/sprintStore";
 import { useUserStore } from "../store/userStore";
@@ -28,40 +28,46 @@ export function Dashboard() {
         : 0;
 
     return (
-        <div className="flex flex-col h-full overflow-y-auto no-scrollbar animate-fade-in text-slate-200">
-            {/* Main Content Area */}
-            <div className="px-6 py-6 space-y-6">
-                {/* Active Sprint Glass Card */}
+        <div className="flex flex-col h-full animate-fade-in">
+            <div className="px-6 py-4 space-y-6">
+                {/* Active Sprint Section */}
                 {activeSprint ? (
                     <div
                         onClick={() => setView("sprint")}
-                        className="glass-card rounded-[2rem] p-6 border border-white/10 shadow-2xl relative overflow-hidden group cursor-pointer hover:border-indigo-500/30 transition-all duration-500"
+                        className="glass-card rounded-[3rem] p-10 border border-white/20 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.8)] relative overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition-all duration-700 active:scale-[0.98] bg-white/[0.05] animate-pulse-slow"
                     >
-                        <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                            <Trophy size={100} />
+                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity rotate-12 group-hover:rotate-0 duration-700">
+                            <Trophy size={120} />
                         </div>
 
                         <div className="relative z-10">
-                            <div className="flex justify-between items-start mb-4">
+                            <div className="flex justify-between items-start mb-6">
                                 <div>
-                                    <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-1 flex items-center gap-2">
-                                        <TrendingUp size={14} /> ACTIVE PROTOCOL
+                                    <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-2 flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                                        Protocol Active
                                     </h3>
-                                    <h2 className="text-xl font-black text-white leading-tight">{activeSprint.name}</h2>
+                                    <h2 className="text-2xl font-black text-white leading-tight uppercase tracking-tight">{activeSprint.name}</h2>
                                 </div>
-                                <div className="text-right">
-                                    <span className="text-xs font-black text-slate-500 uppercase tracking-widest">{sprintDaysLeft} DAYS LEFT</span>
+                                <div className="bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl">
+                                    <span className="text-[9px] font-black text-indigo-300 uppercase tracking-widest">{sprintDaysLeft}D REMAINING</span>
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-2xl font-black text-white leading-none">{sprintProgress}%</span>
-                                    <span className="text-[10px] font-mono text-slate-400">{activeSprint.earned_xp} / {activeSprint.minimum_target_xp} XP</span>
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-4xl font-black text-white italic">{sprintProgress}%</span>
+                                        <span className="text-[10px] font-black text-slate-500 uppercase">Yield</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-slate-400 font-mono text-[10px]">
+                                        <Zap size={10} className="text-yellow-500" />
+                                        <span>{activeSprint.earned_xp} / {activeSprint.minimum_target_xp}</span>
+                                    </div>
                                 </div>
-                                <div className="h-2.5 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
+                                <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5 shadow-inner">
                                     <div
-                                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+                                        className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 shadow-[0_0_20px_rgba(99,102,241,0.4)]"
                                         style={{ width: `${Math.min(100, sprintProgress)}%` }}
                                     />
                                 </div>
@@ -71,48 +77,52 @@ export function Dashboard() {
                 ) : (
                     <div
                         onClick={() => setView("sprint")}
-                        className="glass-card rounded-[2rem] p-8 border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center cursor-pointer hover:border-white/20 transition-all group"
+                        className="glass-card rounded-[2.5rem] p-10 border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center cursor-pointer hover:border-indigo-500/20 transition-all group active:scale-[0.98]"
                     >
-                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <Plus size={32} className="text-slate-700 font-light" />
+                        <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(99,102,241,0.1)] transition-all duration-500">
+                            <Plus size={36} className="text-slate-700 group-hover:text-indigo-400 transition-colors" />
                         </div>
-                        <h4 className="text-slate-300 font-bold">No Active Sprint</h4>
-                        <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest font-black">Initialize Protocol</p>
+                        <h4 className="text-white font-black uppercase tracking-widest text-sm">No Active Protocol</h4>
+                        <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-[0.2em] font-black">Initialize neural focus sequence</p>
                     </div>
                 )}
 
-                {/* Task List Section */}
-                <div>
-                    <div className="flex items-center justify-between mb-4 px-2">
-                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Primary Objectives</h3>
+                {/* Objectives List */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between px-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-1 h-4 bg-indigo-500 rounded-full" />
+                            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Primary Objectives</h3>
+                        </div>
                         <button
                             onClick={() => setAddTaskOpen(true)}
-                            className="p-1.5 hover:bg-white/5 rounded-lg text-indigo-400 transition-colors"
+                            className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-indigo-400 transition-all border border-white/5"
                         >
                             <Plus size={18} />
                         </button>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                         {activeTasks.length === 0 ? (
-                            <div className="py-12 flex flex-col items-center justify-center opacity-30 italic">
-                                <Layout size={32} className="mb-2" />
-                                <span className="text-xs">Objective list clear</span>
+                            <div className="py-20 flex flex-col items-center justify-center text-center opacity-20">
+                                <Zap size={48} className="mb-4 text-slate-500" />
+                                <span className="text-[10px] font-black uppercase tracking-widest">Registry Clear</span>
                             </div>
                         ) : (
-                            activeTasks.slice(0, 5).map(task => (
-                                <div key={task.id} className="transition-all hover:scale-[1.01] hover:-translate-y-0.5">
-                                    <TaskCard task={task} compact />
-                                </div>
-                            ))
+                            <div className="space-y-3">
+                                {activeTasks.slice(0, 5).map(task => (
+                                    <TaskCard key={task.id} task={task} compact />
+                                ))}
+                            </div>
                         )}
 
                         {activeTasks.length > 5 && (
                             <button
                                 onClick={() => setView("tasks")}
-                                className="w-full py-3 glass-card rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-white hover:border-white/20 transition-all font-inter"
+                                className="w-full flex items-center justify-center gap-3 py-4 glass-card rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] hover:text-white hover:border-indigo-500/30 transition-all group"
                             >
-                                View {activeTasks.length - 5} More Objectives
+                                Analysis: {activeTasks.length - 5} Additional Objectives
+                                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                             </button>
                         )}
                     </div>
