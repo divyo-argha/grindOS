@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=grindOS
+Comment=Your competitive productivity system
+Exec=/home/bobdylan/.local/bin/grindOS
+Icon=grindOS
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+StartupNotify=false

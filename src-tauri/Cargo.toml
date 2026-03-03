@@ -1,7 +1,7 @@
 [package]
-name = "productivity-os"
+name = "grindOS"
 version = "0.1.0"
-description = "Competitive Productivity OS"
+description = "Competitive Productivity OS (grindOS)"
 authors = ["you"]
 edition = "2021"
 

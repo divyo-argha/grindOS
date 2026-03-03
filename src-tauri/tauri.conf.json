@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "productivity-os",
+  "productName": "grindOS",
   "version": "0.1.0",
-  "identifier": "com.productivityos.app",
+  "identifier": "com.grindos.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Productivity OS",
+        "title": "grindOS",
         "width": 420,
         "height": 650,
         "resizable": true,

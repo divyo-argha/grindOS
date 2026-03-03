@@ -62,12 +62,12 @@
 
 ini  [Desktop Entry]
   Type=Application
-  Name=Productivity OS
-  Exec=/home/USER/.local/bin/productivity-os
+  Name=grindOS
+  Exec=/home/USER/.local/bin/grindos
   Hidden=false
   X-GNOME-Autostart-enabled=true
 ```
-  Place at: `~/.config/autostart/productivity-os.desktop`
+  Place at: `~/.config/autostart/grindos.desktop`
 - [ ] **T-40** `pnpm tauri build` — release binary
 - [ ] **T-41** Test cold boot autostart
 - [ ] **T-42** Write install script for fresh machines

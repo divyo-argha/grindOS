@@ -35,4 +35,4 @@ export const MOOD_CONFIG = {
     terrible: { emoji: "💀", label: "Terrible", color: "#ef4444" },
 };
 
-export const DB_PATH = import.meta.env.VITE_DB_PATH || "productivity-os.db";
+export const DB_PATH = import.meta.env.VITE_DB_PATH || "grindos.db";
