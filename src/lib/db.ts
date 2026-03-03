@@ -5,8 +5,16 @@ let db: Database | null = null;
 
 export async function getDb(): Promise<Database> {
     if (!db) {
-        db = await Database.load(`sqlite:${DB_PATH}`);
-        await initSchema(db);
+        console.log("📂 Initializing Database connection...");
+        try {
+            db = await Database.load(`sqlite:${DB_PATH}`);
+            console.log("✅ Database loaded successfully at:", DB_PATH);
+            await initSchema(db);
+            console.log("✨ Database schema synchronized.");
+        } catch (err) {
+            console.error("❌ Database initialization FAILED:", err);
+            throw err;
+        }
     }
     return db;
 }
@@ -129,9 +137,20 @@ async function initSchema(db: Database) {
 
 // ── User ──────────────────────────────────────────
 export async function getUser() {
-    const db = await getDb();
-    const rows = await db.select<any[]>("SELECT * FROM users WHERE id = 1");
-    return rows[0];
+    try {
+        const db = await getDb();
+        const rows = await db.select<any[]>("SELECT * FROM users WHERE id = 1");
+        if (rows.length === 0) {
+            console.warn("User with ID 1 not found. Re-initializing...");
+            await db.execute("INSERT OR IGNORE INTO users (id, name) VALUES (1, 'User')");
+            const newRows = await db.select<any[]>("SELECT * FROM users WHERE id = 1");
+            return newRows[0];
+        }
+        return rows[0];
+    } catch (err) {
+        console.error("Failed to fetch user:", err);
+        return null;
+    }
 }
 
 export async function updateUser(data: Partial<{ name: string; rating: number; best_rating: number; current_streak: number; longest_streak: number; total_xp: number }>) {

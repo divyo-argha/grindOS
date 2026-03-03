@@ -1,7 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { useUIStore } from "../store/uiStore";
-import { useTaskStore } from "../store/taskStore";
-import { useSprintStore } from "../store/sprintStore";
 import { Search, Plus, Zap, Layout, Trophy, User, BarChart3, Settings, Package, History } from "lucide-react";
 
 interface Cmd {
@@ -18,8 +16,6 @@ export function CommandPalette() {
     const [selected, setSelected] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
     const { commandOpen, setCommandOpen, setAddTaskOpen, setAddSprintOpen, setView } = useUIStore();
-    const { fetchTasks } = useTaskStore();
-    const { fetchActiveSprint } = useSprintStore();
 
     const commands: Cmd[] = [
         {
@@ -141,8 +137,8 @@ export function CommandPalette() {
                                     onClick={cmd.action}
                                     onMouseEnter={() => setSelected(i)}
                                     className={`w-full flex items-center gap-4 px-4 py-3.5 text-left rounded-2xl transition-all ${selected === i
-                                            ? "bg-white/10 border border-white/10 scale-[1.01] shadow-xl"
-                                            : "hover:bg-white/5 border border-transparent opacity-60 hover:opacity-100"
+                                        ? "bg-white/10 border border-white/10 scale-[1.01] shadow-xl"
+                                        : "hover:bg-white/5 border border-transparent opacity-60 hover:opacity-100"
                                         }`}
                                 >
                                     <div className={`p-2.5 rounded-xl flex-shrink-0 transition-colors ${selected === i ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20" : "bg-white/5 text-slate-400"}`}>

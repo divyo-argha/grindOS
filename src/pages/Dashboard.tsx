@@ -1,19 +1,16 @@
 import { useEffect } from "react";
-import { Zap, Target, TrendingUp, Plus, Command, Layout, Trophy, User } from "lucide-react";
+import { TrendingUp, Plus, Layout, Trophy } from "lucide-react";
 import { useTaskStore } from "../store/taskStore";
 import { useSprintStore } from "../store/sprintStore";
 import { useUserStore } from "../store/userStore";
 import { useUIStore } from "../store/uiStore";
 import { TaskCard } from "../components/TaskCard";
-import { RatingBadge } from "../components/RatingBadge";
-import { getMotivationalMessage } from "../engines/gamificationEngine";
-import { format } from "date-fns";
 
 export function Dashboard() {
     const { tasks, fetchTasks } = useTaskStore();
     const { activeSprint, fetchActiveSprint } = useSprintStore();
-    const { user, fetchUser } = useUserStore();
-    const { setAddTaskOpen, setCommandOpen, setView } = useUIStore();
+    const { fetchUser } = useUserStore();
+    const { setAddTaskOpen, setView } = useUIStore();
 
     useEffect(() => {
         fetchTasks({ isBacklog: false });
@@ -21,10 +18,7 @@ export function Dashboard() {
         fetchUser();
     }, []);
 
-    const today = new Date().toISOString().split("T")[0];
     const activeTasks = tasks.filter(t => t.status !== "completed" && t.status !== "failed" && !t.is_backlog);
-    const completedToday = tasks.filter(t => t.completed_at?.startsWith(today));
-    const todayXP = completedToday.reduce((sum, t) => sum + t.xp_value, 0);
 
     const sprintProgress = activeSprint
         ? Math.round((activeSprint.earned_xp / activeSprint.minimum_target_xp) * 100)
@@ -34,39 +28,9 @@ export function Dashboard() {
         : 0;
 
     return (
-        <div className="flex flex-col h-full overflow-hidden animate-fade-in">
-            {/* Header / Top Bar */}
-            <div className="px-6 py-4 flex items-center justify-between glass-morphism border-b border-white/5 shadow-lg">
-                <div className="flex items-center gap-4">
-                    <div className="relative group cursor-pointer" onClick={() => setView("profile")}>
-                        {user && <RatingBadge rating={user.rating} size="sm" />}
-                        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full opacity-0 group-hover:opacity-20 transition-opacity blur" />
-                    </div>
-                    {user && user.current_streak > 0 && (
-                        <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-500/10 border border-orange-500/20 rounded-full">
-                            <span className="text-sm">🔥</span>
-                            <span className="text-[10px] text-orange-400 font-black uppercase tracking-tighter">{user.current_streak} DAY STREAK</span>
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 bg-yellow-400/10 px-3 py-1.5 rounded-full border border-yellow-400/20">
-                        <Zap size={14} className="text-yellow-400 fill-yellow-400/20" />
-                        <span className="text-[10px] font-black text-yellow-400 uppercase tracking-widest">{todayXP} XP TODAY</span>
-                    </div>
-                    <button
-                        onClick={() => setCommandOpen(true)}
-                        className="p-2 glass-card rounded-xl text-slate-400 hover:text-white transition-all hover:scale-105"
-                        title="Command Palette (Ctrl+Space)"
-                    >
-                        <Command size={18} />
-                    </button>
-                </div>
-            </div>
-
+        <div className="flex flex-col h-full overflow-y-auto no-scrollbar animate-fade-in text-slate-200">
             {/* Main Content Area */}
-            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+            <div className="px-6 py-6 space-y-6">
                 {/* Active Sprint Glass Card */}
                 {activeSprint ? (
                     <div
@@ -110,10 +74,10 @@ export function Dashboard() {
                         className="glass-card rounded-[2rem] p-8 border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center cursor-pointer hover:border-white/20 transition-all group"
                     >
                         <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <Plus size={32} className="text-slate-700" />
+                            <Plus size={32} className="text-slate-700 font-light" />
                         </div>
                         <h4 className="text-slate-300 font-bold">No Active Sprint</h4>
-                        <p className="text-xs text-slate-500 mt-1">Start a protocol to maximize your gains.</p>
+                        <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest font-black">Initialize Protocol</p>
                     </div>
                 )}
 
@@ -146,40 +110,12 @@ export function Dashboard() {
                         {activeTasks.length > 5 && (
                             <button
                                 onClick={() => setView("tasks")}
-                                className="w-full py-3 glass-card rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-white hover:border-white/20 transition-all"
+                                className="w-full py-3 glass-card rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-white hover:border-white/20 transition-all font-inter"
                             >
                                 View {activeTasks.length - 5} More Objectives
                             </button>
                         )}
                     </div>
-                </div>
-            </div>
-
-            {/* Bottom Navigation */}
-            <div className="px-6 py-6 glass-morphism border-t border-white/5 flex items-center justify-between gap-4">
-                <button
-                    onClick={() => setAddTaskOpen(true)}
-                    className="flex-1 flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-2xl font-black text-xs shadow-lg shadow-indigo-500/20 transition-all active:scale-95 group"
-                >
-                    <Plus size={18} className="group-hover:rotate-90 transition-transform" />
-                    ADD OBJECTIVE
-                </button>
-
-                <div className="flex gap-2">
-                    {[
-                        { id: "sprint", icon: Zap, color: "#818cf8" },
-                        { id: "profile", icon: User, color: "#a78bfa" },
-                        { id: "analytics", icon: TrendingUp, color: "#f472b6" }
-                    ].map(nav => (
-                        <button
-                            key={nav.id}
-                            onClick={() => setView(nav.id as any)}
-                            className="p-4 glass-card rounded-2xl text-slate-500 hover:text-white transition-all hover:scale-105 active:scale-90"
-                            style={{ "--hover-color": nav.color } as any}
-                        >
-                            <nav.icon size={18} />
-                        </button>
-                    ))}
                 </div>
             </div>
         </div>
