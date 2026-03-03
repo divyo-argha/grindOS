@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Trophy, Target, CheckCircle2, Plus, Zap, Flame, Clock, ChevronRight } from "lucide-react";
+import { Trophy, Plus, Zap, Clock, ChevronRight } from "lucide-react";
 import { useSprintStore } from "../store/sprintStore";
 import { useTaskStore } from "../store/taskStore";
 import { useUserStore } from "../store/userStore";
@@ -37,24 +37,22 @@ export function Sprint() {
 
     if (!activeSprint) {
         return (
-            <div className="flex flex-col items-center justify-center h-full p-10 text-center animate-fade-in relative">
-                <div className="relative mb-10 pt-10">
-                    <div className="w-40 h-40 bg-white/2 rounded-full flex items-center justify-center border border-white/5 shadow-[0_0_60px_rgba(255,255,255,0.02)] animate-float">
-                        <Trophy size={80} className="text-slate-800 opacity-50" />
-                    </div>
-                    <div className="absolute -top-2 -right-2 bg-indigo-500/20 p-3 rounded-2xl shadow-lg border border-indigo-500/30 cyber-glow">
-                        <Zap size={24} className="text-indigo-400" />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '40px', textAlign: 'center' }}>
+                <div style={{ position: 'relative', marginBottom: '40px' }}>
+                    <div style={{ width: '120px', height: '120px', background: 'rgba(255,255,255,0.02)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <Trophy size={60} style={{ color: '#1e293b' }} />
                     </div>
                 </div>
 
-                <h2 className="text-2xl font-black text-white mb-4 tracking-[0.2em] uppercase leading-none">Protocol Idle</h2>
-                <p className="text-[10px] text-slate-500 max-w-sm mb-12 leading-relaxed font-black uppercase tracking-[0.3em]">
-                    High-intensity focus bursts are required for neural advancement. Initiate new sequence.
+                <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'white', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '16px' }}>Protocol Idle</h2>
+                <p style={{ fontSize: '10px', color: '#64748b', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', maxWidth: '240px', marginBottom: '40px' }}>
+                    High-intensity focus bursts required for advancement.
                 </p>
 
                 <button
                     onClick={() => setAddSprintOpen(true)}
-                    className="premium-btn group flex items-center gap-4 px-10 py-6"
+                    className="premium-btn"
+                    style={{ padding: '20px 40px', borderRadius: '1.5rem', display: 'flex', alignItems: 'center', gap: '12px' }}
                 >
                     <Plus size={20} />
                     INITIALIZE BURST
@@ -64,123 +62,76 @@ export function Sprint() {
     }
 
     const daysLeft = Math.max(0, Math.ceil((new Date(activeSprint.end_date).getTime() - Date.now()) / 86400000));
-    const isOverdue = daysLeft === 0 && new Date(activeSprint.end_date) < new Date();
 
     return (
-        <div className="flex flex-col h-full animate-fade-in">
-            {/* Premium Header Zone */}
-            <div className="px-8 pt-12 pb-14 glass-morphism border-b border-white/10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-10 opacity-[0.03] rotate-12">
-                    <Flame size={220} />
-                </div>
-
-                <div className="relative z-10 flex items-start justify-between mb-10">
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            {/* Header Zone */}
+            <div style={{ padding: '40px 32px', background: 'rgba(10, 10, 20, 0.6)', borderBottom: '1px solid rgba(255,255,255,0.1)', position: 'relative' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
                     <div>
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] rounded-xl border border-indigo-500/20 cyber-glow">Neural Burst Active</span>
-                            {isOverdue && <span className="px-3 py-1 bg-red-500/10 text-red-500 text-[10px] font-black uppercase tracking-[0.3em] rounded-xl border border-red-500/20">Link Critical</span>}
-                        </div>
-                        <h1 className="text-4xl font-black text-white tracking-tighter leading-none uppercase italic">{activeSprint.name}</h1>
+                        <span style={{ display: 'inline-block', padding: '4px 12px', background: 'rgba(99,102,241,0.1)', color: '#818cf8', fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', borderRadius: '8px', border: '1px solid rgba(99,102,241,0.2)', marginBottom: '16px' }}>Neural Burst Active</span>
+                        <h1 style={{ fontSize: '32px', fontWeight: 900, color: 'white', textTransform: 'uppercase', fontStyle: 'italic' }}>{activeSprint.name}</h1>
                     </div>
-
-                    <div className="text-right glass-card p-4 rounded-[1.5rem] border border-white/10">
-                        <div className="text-3xl font-black text-white leading-none tabular-nums italic">{daysLeft}</div>
-                        <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-2">Cycles Left</div>
+                    <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '1.25rem', textAlign: 'center', minWidth: '80px' }}>
+                        <div style={{ fontSize: '24px', fontWeight: 900, color: 'white' }}>{daysLeft}</div>
+                        <div style={{ fontSize: '8px', fontWeight: 900, color: '#64748b', textTransform: 'uppercase' }}>Cycles</div>
                     </div>
                 </div>
 
-                {/* Sub-stats Grid */}
-                <div className="grid grid-cols-3 gap-4 mb-12">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '40px' }}>
                     {[
-                        { icon: Clock, label: "Threshold", val: format(new Date(activeSprint.end_date), "MMM dd"), color: "text-blue-400" },
-                        { icon: Target, label: "Efficiency", val: `${activeSprint.minimum_target_xp} XP`, color: "text-orange-400" },
-                        { icon: Trophy, label: "Class", val: activeSprint.difficulty_rating, color: "text-purple-400" },
+                        { icon: Clock, label: "Threshold", val: format(new Date(activeSprint.end_date), "MMM dd") },
+                        { icon: Zap, label: "Target", val: `${activeSprint.minimum_target_xp} XP` },
+                        { icon: Trophy, label: "Class", val: activeSprint.difficulty_rating || "Standard" },
                     ].map((s, i) => (
-                        <div key={i} className="flex flex-col gap-2 bg-white/2 p-4 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group">
-                            <div className={`p-2 bg-white/5 rounded-lg w-fit ${s.color} opacity-60 group-hover:opacity-100 transition-opacity`}>
-                                <s.icon size={16} />
-                            </div>
-                            <div>
-                                <div className="text-[8px] font-black text-slate-600 uppercase tracking-[0.2em] mb-1">{s.label}</div>
-                                <div className="text-[10px] font-black text-slate-100 uppercase tracking-tighter">{s.val}</div>
-                            </div>
+                        <div key={i} style={{ padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <s.icon size={14} style={{ color: '#64748b', marginBottom: '8px' }} />
+                            <div style={{ fontSize: '8px', fontWeight: 900, color: '#475569', textTransform: 'uppercase' }}>{s.label}</div>
+                            <div style={{ fontSize: '10px', fontWeight: 900, color: '#cbd5e1' }}>{s.val}</div>
                         </div>
                     ))}
                 </div>
 
-                {/* Progress Cluster */}
-                <div className="space-y-5">
-                    <div className="flex justify-between items-end">
-                        <div className="flex items-baseline gap-3">
-                            <span className="text-5xl font-black text-white tabular-nums italic tracking-tighter">{sprintProgress}%</span>
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Synchronization</span>
-                        </div>
-                        <div className="text-[10px] font-black text-indigo-400 bg-indigo-500/5 px-4 py-2 rounded-xl border border-indigo-500/10 tabular-nums">
-                            {activeSprint.earned_xp} / {activeSprint.minimum_target_xp} XP
-                        </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                        <span style={{ fontSize: '40px', fontWeight: 900, color: 'white', fontStyle: 'italic' }}>{sprintProgress}%</span>
+                        <span style={{ fontSize: '10px', fontWeight: 900, color: '#6366f1' }}>{activeSprint.earned_xp} / {activeSprint.minimum_target_xp} XP</span>
                     </div>
-                    <div className="h-4 bg-white/5 rounded-full overflow-hidden border border-white/5 p-1 shadow-inner relative">
-                        <div
-                            className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(99,102,241,0.3)] relative"
-                            style={{ width: `${Math.min(100, sprintProgress)}%` }}
-                        >
-                            <div className="absolute inset-0 bg-white/10 animate-pulse" />
-                        </div>
+                    <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden', padding: '2px' }}>
+                        <div style={{ height: '100%', width: `${Math.min(100, sprintProgress)}%`, background: 'linear-gradient(90deg, #6366f1, #a855f7)', borderRadius: '10px' }} />
                     </div>
                 </div>
             </div>
 
-            {/* Content Zone */}
-            <div className="px-8 py-10">
-                <div className="flex items-center justify-between mb-8 px-2">
-                    <div>
-                        <h3 className="text-[11px] font-black text-white uppercase tracking-[0.3em]">Protocol Registries</h3>
-                        <p className="text-[9px] text-slate-600 font-bold mt-1 uppercase tracking-widest">{sprintTasks.length} NODES IDENTIFIED</p>
-                    </div>
-                    <button
-                        onClick={() => setAddTaskOpen(true)}
-                        className="w-10 h-10 flex items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition-all active:scale-95 shadow-lg shadow-indigo-500/5"
-                    >
-                        <Plus size={20} />
+            {/* List Zone */}
+            <div style={{ padding: '32px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                    <h3 style={{ fontSize: '10px', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.3em' }}>Node Registry</h3>
+                    <button onClick={() => setAddTaskOpen(true)} style={{ padding: '8px', background: 'rgba(99,102,241,0.1)', borderRadius: '12px', color: '#818cf8', cursor: 'pointer' }}>
+                        <Plus size={18} />
                     </button>
                 </div>
 
-                <div className="space-y-4">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {sprintTasks.length === 0 ? (
-                        <div className="glass-card rounded-[2.5rem] p-16 border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center opacity-30">
-                            <Plus size={40} className="text-slate-800 mb-4" />
-                            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Registries Clear</h4>
+                        <div style={{ padding: '40px', textAlign: 'center', opacity: 0.2 }}>
+                            <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>Registries Clear</p>
                         </div>
                     ) : (
-                        <div className="space-y-4">
-                            {sprintTasks.map(task => (
-                                <TaskCard key={task.id} task={task} />
-                            ))}
-                        </div>
+                        sprintTasks.map(task => (
+                            <TaskCard key={task.id} task={task} />
+                        ))
                     )}
                 </div>
 
-                {/* Completion Control */}
                 {sprintProgress >= 100 && (
-                    <div className="mt-16 glass-morphism p-8 rounded-[3rem] border border-green-500/20 shadow-[0_20px_60px_-20px_rgba(34,197,94,0.3)] relative overflow-hidden group animate-bounce-in">
-                        <div className="relative z-10 flex flex-col items-center text-center gap-6">
-                            <div className="w-16 h-16 bg-green-500/10 rounded-[1.5rem] flex items-center justify-center text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.1)]">
-                                <CheckCircle2 size={32} />
-                            </div>
-                            <div>
-                                <h4 className="text-lg font-black text-white uppercase tracking-[0.2em]">Synchronization Locked</h4>
-                                <p className="text-[10px] text-green-500/60 font-black uppercase tracking-[0.3em] mt-2">Protocol Ready for Archival</p>
-                            </div>
-                            <button
-                                onClick={handleFinishSprint}
-                                className="premium-btn w-full !rounded-[2rem] !py-6"
-                                style={{ background: 'linear-gradient(135deg, #22c55e, #166534)' }}
-                            >
-                                FINALIZE SPRINT
-                                <ChevronRight size={20} className="inline-block ml-2 group-hover:translate-x-2 transition-transform" />
-                            </button>
-                        </div>
-                    </div>
+                    <button
+                        onClick={handleFinishSprint}
+                        style={{ width: '100%', padding: '24px', borderRadius: '1.5rem', marginTop: '32px', background: 'linear-gradient(135deg, #22c55e, #166534)', color: 'white', fontWeight: 900, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        FINALIZE PROTOCOL
+                        <ChevronRight size={20} style={{ marginLeft: '8px' }} />
+                    </button>
                 )}
             </div>
         </div>

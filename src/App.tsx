@@ -18,60 +18,74 @@ export default function App() {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("GrindOS: Neural Link initializing...");
     const initWindow = async () => {
       try {
         const win = getCurrentWindow();
-        console.log("Tauri Window context acquired.");
         await win.center();
-        await win.setSize(new LogicalSize(420, 700));
+        await win.setSize(new LogicalSize(420, 705)); // Slight increase to account for border
         await win.show();
         await win.setFocus();
-        console.log("Window lifecycle finalized.");
       } catch (e) {
-        console.error("CRITICAL WINDOW FAILURE", e);
+        console.error("Window Lifecycle Error", e);
       }
     };
     initWindow();
   }, []);
 
   const renderView = () => {
-    try {
-      switch (currentView) {
-        case "dashboard": return <Dashboard />;
-        case "profile": return <Profile />;
-        case "sprint": return <Sprint />;
-        default: return <Dashboard />;
-      }
-    } catch (e) {
-      return (
-        <div className="p-10 text-red-500 font-mono text-xs">
-          CRITICAL RENDER FAILURE: {String(e)}
-        </div>
-      );
+    switch (currentView) {
+      case "dashboard": return <Dashboard />;
+      case "profile": return <Profile />;
+      case "sprint": return <Sprint />;
+      default: return <Dashboard />;
     }
   };
 
   return (
     <div
       ref={rootRef}
-      className="w-[420px] min-h-[700px] text-slate-100 font-inter p-2 bg-[#050510]"
-      style={{ backgroundImage: "url('./src/assets/premium_bg.png')", backgroundSize: 'cover' }}
+      style={{
+        width: '420px',
+        height: '700px',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0',
+        overflow: 'hidden',
+        position: 'relative',
+        background: 'transparent'
+      }}
     >
-      <div className="flex flex-col min-h-[650px] overflow-hidden glass rounded-[2.5rem] border border-white/20 shadow-2xl relative bg-[#050510]/80 backdrop-blur-3xl">
-        <div data-tauri-drag-region className="absolute top-0 left-0 right-0 h-16 z-[150] cursor-grab" />
+      {/* Explicit Drag Handle Bar (Aesthetic & Functional) */}
+      <div
+        data-tauri-drag-region
+        style={{
+          height: '24px',
+          background: 'rgba(5,5,15,0.8)',
+          backdropFilter: 'blur(20px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'grab',
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          zIndex: 1000,
+          borderRadius: '1.5rem 1.5rem 0 0'
+        }}
+        className="drag-handle"
+      >
+        <div style={{ width: '40px', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }} />
+      </div>
 
+      <div className="glass" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRadius: '0 0 2rem 2rem' }}>
         <Header />
 
-        <div className="flex-1 overflow-hidden relative">
-          <div className="h-full overflow-y-auto no-scrollbar relative p-4">
-            {renderView()}
-          </div>
+        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+          {renderView()}
         </div>
 
         <Terminal />
         <Navigation />
 
+        {/* Portals */}
         <CommandPalette />
         <AddTaskModal />
         <CreateSprintModal />

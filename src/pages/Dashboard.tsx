@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Plus, Trophy, Zap, ChevronRight } from "lucide-react";
+import { Plus, Trophy, Zap } from "lucide-react";
 import { useTaskStore } from "../store/taskStore";
 import { useSprintStore } from "../store/sprintStore";
 import { useUserStore } from "../store/userStore";
@@ -28,104 +28,86 @@ export function Dashboard() {
         : 0;
 
     return (
-        <div className="flex flex-col h-full animate-fade-in">
-            <div className="px-6 py-4 space-y-6">
-                {/* Active Sprint Section */}
-                {activeSprint ? (
-                    <div
-                        onClick={() => setView("sprint")}
-                        className="glass-card rounded-[3rem] p-10 border border-white/20 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.8)] relative overflow-hidden group cursor-pointer hover:border-indigo-500/50 transition-all duration-700 active:scale-[0.98] bg-white/[0.05] animate-pulse-slow"
-                    >
-                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity rotate-12 group-hover:rotate-0 duration-700">
-                            <Trophy size={120} />
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '24px 16px', gap: '24px' }}>
+            {/* Active Sprint Section */}
+            {activeSprint ? (
+                <div
+                    onClick={() => setView("sprint")}
+                    style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        borderRadius: '2rem',
+                        padding: '30px',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        overflow: 'hidden'
+                    }}
+                >
+                    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.05 }}>
+                        <Trophy size={100} />
+                    </div>
+
+                    <div style={{ position: 'relative', zIndex: 10 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                            <div>
+                                <h3 style={{ fontSize: '10px', fontWeight: 900, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '8px' }}>Active Protocol</h3>
+                                <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'white', textTransform: 'uppercase' }}>{activeSprint.name}</h2>
+                            </div>
+                            <div style={{ background: 'rgba(99,102,241,0.1)', padding: '6px 12px', borderRadius: '10px', border: '1px solid rgba(99,102,241,0.2)' }}>
+                                <span style={{ fontSize: '9px', fontWeight: 900, color: '#a5b4fc' }}>{sprintDaysLeft}D LEFT</span>
+                            </div>
                         </div>
 
-                        <div className="relative z-10">
-                            <div className="flex justify-between items-start mb-6">
-                                <div>
-                                    <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-2 flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                        Protocol Active
-                                    </h3>
-                                    <h2 className="text-2xl font-black text-white leading-tight uppercase tracking-tight">{activeSprint.name}</h2>
-                                </div>
-                                <div className="bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl">
-                                    <span className="text-[9px] font-black text-indigo-300 uppercase tracking-widest">{sprintDaysLeft}D REMAINING</span>
-                                </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                                <span style={{ fontSize: '32px', fontWeight: 900, fontStyle: 'italic', color: 'white' }}>{sprintProgress}%</span>
+                                <span style={{ fontSize: '10px', fontWeight: 900, color: '#64748b' }}>{activeSprint.earned_xp} / {activeSprint.minimum_target_xp} XP</span>
                             </div>
-
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-end">
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-4xl font-black text-white italic">{sprintProgress}%</span>
-                                        <span className="text-[10px] font-black text-slate-500 uppercase">Yield</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-slate-400 font-mono text-[10px]">
-                                        <Zap size={10} className="text-yellow-500" />
-                                        <span>{activeSprint.earned_xp} / {activeSprint.minimum_target_xp}</span>
-                                    </div>
-                                </div>
-                                <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5 shadow-inner">
-                                    <div
-                                        className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 shadow-[0_0_20px_rgba(99,102,241,0.4)]"
-                                        style={{ width: `${Math.min(100, sprintProgress)}%` }}
-                                    />
-                                </div>
+                            <div style={{ height: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
+                                <div style={{ height: '100%', width: `${Math.min(100, sprintProgress)}%`, background: 'linear-gradient(90deg, #6366f1, #a855f7)', borderRadius: '10px' }} />
                             </div>
                         </div>
                     </div>
-                ) : (
-                    <div
-                        onClick={() => setView("sprint")}
-                        className="glass-card rounded-[2.5rem] p-10 border-2 border-dashed border-white/5 flex flex-col items-center justify-center text-center cursor-pointer hover:border-indigo-500/20 transition-all group active:scale-[0.98]"
-                    >
-                        <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(99,102,241,0.1)] transition-all duration-500">
-                            <Plus size={36} className="text-slate-700 group-hover:text-indigo-400 transition-colors" />
+                </div>
+            ) : (
+                <div
+                    onClick={() => setView("sprint")}
+                    style={{
+                        background: 'rgba(0,0,0,0.2)',
+                        border: '2px dashed rgba(255,255,255,0.05)',
+                        borderRadius: '2rem',
+                        padding: '40px',
+                        textAlign: 'center',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <div style={{ margin: '0 auto 20px', width: '60px', height: '60px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Plus size={30} color="#475569" />
+                    </div>
+                    <h4 style={{ color: 'white', fontWeight: 900, fontSize: '14px', textTransform: 'uppercase' }}>No Active Protocol</h4>
+                </div>
+            )}
+
+            {/* Objectives List */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 8px' }}>
+                    <h3 style={{ fontSize: '11px', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.3em' }}>Primary Objectives</h3>
+                    <button onClick={() => setAddTaskOpen(true)} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '6px', color: '#818cf8', cursor: 'pointer' }}>
+                        <Plus size={18} />
+                    </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {activeTasks.length === 0 ? (
+                        <div style={{ padding: '60px 0', textAlign: 'center', opacity: 0.2 }}>
+                            <Zap size={40} style={{ marginBottom: '16px' }} />
+                            <p style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}>Registry Clear</p>
                         </div>
-                        <h4 className="text-white font-black uppercase tracking-widest text-sm">No Active Protocol</h4>
-                        <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-[0.2em] font-black">Initialize neural focus sequence</p>
-                    </div>
-                )}
-
-                {/* Objectives List */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between px-3">
-                        <div className="flex items-center gap-3">
-                            <div className="w-1 h-4 bg-indigo-500 rounded-full" />
-                            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Primary Objectives</h3>
-                        </div>
-                        <button
-                            onClick={() => setAddTaskOpen(true)}
-                            className="w-8 h-8 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-indigo-400 transition-all border border-white/5"
-                        >
-                            <Plus size={18} />
-                        </button>
-                    </div>
-
-                    <div className="space-y-4">
-                        {activeTasks.length === 0 ? (
-                            <div className="py-20 flex flex-col items-center justify-center text-center opacity-20">
-                                <Zap size={48} className="mb-4 text-slate-500" />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Registry Clear</span>
-                            </div>
-                        ) : (
-                            <div className="space-y-3">
-                                {activeTasks.slice(0, 5).map(task => (
-                                    <TaskCard key={task.id} task={task} compact />
-                                ))}
-                            </div>
-                        )}
-
-                        {activeTasks.length > 5 && (
-                            <button
-                                onClick={() => setView("tasks")}
-                                className="w-full flex items-center justify-center gap-3 py-4 glass-card rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] hover:text-white hover:border-indigo-500/30 transition-all group"
-                            >
-                                Analysis: {activeTasks.length - 5} Additional Objectives
-                                <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                            </button>
-                        )}
-                    </div>
+                    ) : (
+                        activeTasks.slice(0, 5).map(task => (
+                            <TaskCard key={task.id} task={task} compact />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

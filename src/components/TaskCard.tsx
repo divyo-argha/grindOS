@@ -13,12 +13,11 @@ interface Props {
 export function TaskCard({ task, compact = false }: Props) {
     const [expanded, setExpanded] = useState(false);
     const [newSubtask, setNewSubtask] = useState("");
-    const { completeTask, deleteTask, fetchSubtasks, subtasks, addSubtask, completeSubtask, deleteSubtask, fetchTasks } = useTaskStore();
+    const { completeTask, deleteTask, fetchSubtasks, subtasks, addSubtask, completeSubtask, fetchTasks } = useTaskStore();
     const { user, fetchUser } = useUserStore();
 
     const pCfg = PRIORITY_CONFIG[task.priority as keyof typeof PRIORITY_CONFIG] || PRIORITY_CONFIG.medium;
     const taskSubs = subtasks[task.id] || [];
-    const completedSubs = taskSubs.filter(s => s.status === "completed").length;
     const isCompleted = task.status === "completed";
 
     async function handleComplete() {
@@ -48,118 +47,85 @@ export function TaskCard({ task, compact = false }: Props) {
     }
 
     return (
-        <div className={`group glass-card rounded-[1.75rem] transition-all duration-500 ${isCompleted
-            ? "opacity-40 grayscale-[0.8]"
-            : "hover:border-white/20 hover:shadow-[0_15px_35px_rgba(0,0,0,0.4)]"
-            } border border-white/10 overflow-hidden relative`}>
-
-            {/* Priority Edge Indicator */}
-            <div
-                className="absolute left-0 top-0 bottom-0 w-1 shadow-[4px_0_10px_rgba(0,0,0,0.2)]"
-                style={{ backgroundColor: pCfg.color }}
-            />
-
-            <div className="flex items-center gap-5 p-5">
-                {/* Checkbox */}
+        <div style={{
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: '1.25rem',
+            border: '1px solid rgba(255,255,255,0.05)',
+            overflow: 'hidden',
+            transition: 'all 0.3s',
+            opacity: isCompleted ? 0.4 : 1
+        }}>
+            <div style={{ display: 'flex', alignItems: 'center', padding: '16px', gap: '12px' }}>
                 <button
                     onClick={handleComplete}
                     disabled={isCompleted}
-                    className={`relative flex-shrink-0 w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all duration-500 ${isCompleted
-                        ? "bg-indigo-500 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.6)]"
-                        : "border-white/10 hover:border-indigo-500/50 hover:bg-white/5"
-                        }`}
+                    style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '8px',
+                        border: '2px solid rgba(255,255,255,0.1)',
+                        background: isCompleted ? '#6366f1' : 'transparent',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: isCompleted ? 'default' : 'pointer'
+                    }}
                 >
-                    {isCompleted ? (
-                        <Check size={16} className="text-white stroke-[4]" />
-                    ) : (
-                        <div className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-indigo-500/50 group-hover:scale-150 transition-all" />
-                    )}
+                    {isCompleted && <Check size={14} />}
                 </button>
 
-                {/* Content */}
-                <div className="flex-1 min-w-0 py-1" onClick={handleExpand}>
-                    <div className="flex items-center gap-3 mb-1">
-                        <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md border`} style={{ color: pCfg.color, borderColor: `${pCfg.color}33`, backgroundColor: `${pCfg.color}11` }}>
-                            {pCfg.label}
-                        </span>
-                        {taskSubs.length > 0 && (
-                            <span className="text-[9px] font-black text-slate-600 uppercase tracking-tighter">
-                                {completedSubs}/{taskSubs.length} SECONDS
-                            </span>
-                        )}
+                <div style={{ flex: 1, cursor: 'pointer' }} onClick={handleExpand}>
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '9px', fontWeight: 900, color: pCfg.color, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{pCfg.label}</span>
                     </div>
-                    <h4 className={`text-sm font-black tracking-tight uppercase ${isCompleted ? "line-through text-slate-600" : "text-slate-100"}`}>
-                        {task.title}
-                    </h4>
+                    <h4 style={{ fontSize: '13px', fontWeight: 700, color: 'white', textDecoration: isCompleted ? 'line-through' : 'none' }}>{task.title}</h4>
                 </div>
 
-                {/* Reward Badge */}
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                    <div className="flex items-center gap-1.5 bg-yellow-500/5 px-2.5 py-1 rounded-xl border border-yellow-500/10">
-                        <Zap size={10} className="text-yellow-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-yellow-500">+{task.xp_value}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(234,179,8,0.1)', padding: '4px 8px', borderRadius: '8px' }}>
+                        <Zap size={10} color="#eab308" />
+                        <span style={{ fontSize: '10px', fontWeight: 900, color: '#eab308' }}>+{task.xp_value}</span>
                     </div>
-                </div>
-
-                {/* Actions */}
-                {!compact && (
-                    <div className="flex items-center gap-2 pl-2 border-l border-white/5 ml-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        <button onClick={() => deleteTask(task.id)} className="p-2 hover:bg-red-500/10 rounded-xl text-slate-600 hover:text-red-500 transition-all">
-                            <Trash2 size={16} />
+                    {!compact && (
+                        <button onClick={() => deleteTask(task.id)} style={{ padding: '8px', color: '#64748b', cursor: 'pointer', background: 'transparent' }}>
+                            <Trash2 size={14} />
                         </button>
-                    </div>
-                )}
-
-                <button
-                    onClick={handleExpand}
-                    className={`p-2 rounded-xl text-slate-600 hover:text-white transition-all ${expanded ? "text-indigo-400 rotate-180" : ""}`}
-                >
-                    <ChevronDown size={14} />
-                </button>
+                    )}
+                    <button onClick={handleExpand} style={{ padding: '8px', color: '#64748b', cursor: 'pointer', background: 'transparent', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }}>
+                        <ChevronDown size={14} />
+                    </button>
+                </div>
             </div>
 
-            {/* Subtasks Section */}
             {expanded && (
-                <div className="px-6 pb-6 pt-2 animate-fade-in bg-white/[0.02]">
-                    <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full mb-5" />
-
-                    <div className="space-y-3 max-h-40 overflow-y-auto no-scrollbar pr-2 mb-5">
+                <div style={{ padding: '0 16px 16px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.1)' }}>
+                    <div style={{ padding: '12px 0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {taskSubs.length > 0 ? (
                             taskSubs.map(sub => (
-                                <div key={sub.id} className="flex items-center gap-4 py-2 group/sub animate-slide-in">
+                                <div key={sub.id} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     <button
                                         onClick={() => sub.status !== "completed" && completeSubtask(sub.id, task.id)}
-                                        className={`w-5 h-5 rounded-lg border flex items-center justify-center flex-shrink-0 transition-all ${sub.status === "completed"
-                                            ? "bg-indigo-500/10 border-indigo-500/40"
-                                            : "border-white/10 hover:border-indigo-500/30"
-                                            }`}
+                                        style={{ width: '18px', height: '18px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.1)', background: sub.status === 'completed' ? '#6366f1' : 'transparent', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                     >
-                                        {sub.status === "completed" && <Check size={12} className="text-indigo-400 stroke-[3]" />}
+                                        {sub.status === 'completed' && <Check size={10} />}
                                     </button>
-                                    <span className={`text-[11px] font-bold tracking-tight uppercase flex-1 ${sub.status === "completed" ? "line-through text-slate-600" : "text-slate-300"}`}>
-                                        {sub.title}
-                                    </span>
-                                    <button onClick={() => deleteSubtask(sub.id, task.id)} className="opacity-0 group-hover/sub:opacity-100 p-1.5 hover:text-red-500 text-slate-700 transition-all">
-                                        <Trash2 size={12} />
-                                    </button>
+                                    <span style={{ fontSize: '11px', color: sub.status === 'completed' ? '#64748b' : '#cbd5e1', textDecoration: sub.status === 'completed' ? 'line-through' : 'none' }}>{sub.title}</span>
                                 </div>
                             ))
                         ) : (
-                            <div className="py-4 text-center opacity-20">
-                                <span className="text-[9px] font-black uppercase tracking-widest italic">No sub-objectives defined</span>
-                            </div>
+                            <p style={{ fontSize: '10px', color: '#475569', fontStyle: 'italic' }}>No sub-objectives</p>
                         )}
                     </div>
 
-                    {/* Add Subtask Input */}
-                    <div className="flex items-center gap-3 bg-white/5 px-4 py-3 rounded-2xl border border-white/5 focus-within:border-indigo-500/40 focus-within:bg-indigo-500/5 transition-all group/input">
-                        <Target size={16} className="text-slate-500 group-focus-within/input:text-indigo-500 transition-colors" />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '10px' }}>
+                        <Target size={14} color="#64748b" />
                         <input
                             value={newSubtask}
                             onChange={e => setNewSubtask(e.target.value)}
                             onKeyDown={handleAddSubtask}
-                            placeholder="DEFINE SUB-OBJECTIVE..."
-                            className="flex-1 bg-transparent text-[10px] font-black text-indigo-200 placeholder-slate-700 outline-none uppercase tracking-widest"
+                            placeholder="Add sub-objective..."
+                            style={{ flex: 1, background: 'transparent', border: 'none', color: 'white', fontSize: '11px', outline: 'none' }}
                         />
                     </div>
                 </div>

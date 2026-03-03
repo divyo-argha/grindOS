@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Trophy, Target, Rocket, ChevronRight, X, Clock, Zap } from "lucide-react";
+import { Rocket, X, ChevronRight } from "lucide-react";
 import { useSprintStore } from "../store/sprintStore";
 import { useUIStore } from "../store/uiStore";
 import { useTaskStore } from "../store/taskStore";
@@ -30,8 +30,6 @@ export function CreateSprintModal() {
         try {
             const startDate = new Date().toISOString();
             const endDate = addDays(new Date(), form.duration).toISOString();
-
-            console.log("Submitting sprint protocol...");
             await createSprint({
                 name: form.name,
                 start_date: startDate,
@@ -41,146 +39,97 @@ export function CreateSprintModal() {
                 daysAvailable: form.duration,
                 status: "active"
             });
-            console.log("Sprint creation successful!");
-
             setAddSprintOpen(false);
             showNotification(`PROTOCOL "${form.name}" INITIALIZED`, "success");
         } catch (err) {
-            console.error("CRITICAL SPRINT FAILURE:", err);
+            console.error(err);
             showNotification("INITIALIZATION FAILURE", "error");
         }
     }
 
     return (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
             <div
-                className="absolute inset-0 bg-black/80 backdrop-blur-xl animate-fade-in"
+                style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)' }}
                 onClick={() => setAddSprintOpen(false)}
             />
 
-            <div className="relative w-full max-w-lg glass-morphism rounded-[3rem] shadow-[0_0_120px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden animate-slide-in">
-                {/* Visual Accent */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 via-indigo-500 to-purple-500 animate-pulse" />
+            <div style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '440px',
+                background: '#0f0f1a',
+                borderRadius: '2.5rem',
+                border: '1px solid rgba(255,255,255,0.1)',
+                overflow: 'hidden',
+                boxShadow: '0 50px 100px rgba(0,0,0,0.5)'
+            }}>
+                <div style={{ height: '4px', background: 'linear-gradient(90deg, #f97316, #6366f1, #a855f7)' }} />
 
-                <div className="p-8">
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-10">
-                        <div className="flex items-center gap-5">
-                            <div className="p-4 bg-orange-500/10 rounded-[1.5rem] border border-orange-500/20 shadow-[0_0_20px_rgba(233,84,32,0.15)]">
-                                <Rocket className="text-orange-500" size={28} />
+                <div style={{ padding: '32px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
+                        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                            <div style={{ padding: '12px', background: 'rgba(249, 115, 22, 0.1)', borderRadius: '1rem', color: '#f97316' }}>
+                                <Rocket size={24} />
                             </div>
-                            <div>
-                                <h2 className="text-2xl font-black text-white tracking-tighter uppercase leading-none">Initialize Sprint</h2>
-                                <div className="flex items-center gap-2 mt-2">
-                                    <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Status: Preparing Focus Burst</p>
-                                </div>
-                            </div>
+                            <h2 style={{ fontSize: '20px', fontWeight: 900, color: 'white', textTransform: 'uppercase' }}>Initialize Sprint</h2>
                         </div>
-                        <button
-                            onClick={() => setAddSprintOpen(false)}
-                            className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-white/10 transition-all text-slate-500 hover:text-white border border-white/5 active:scale-95"
-                        >
+                        <button onClick={() => setAddSprintOpen(false)} style={{ background: 'transparent', color: '#475569', cursor: 'pointer' }}>
                             <X size={24} />
                         </button>
                     </div>
 
-                    <div className="space-y-8">
-                        {/* Name Input */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <div>
-                            <label>Protocol Identifier</label>
-                            <div className="relative group/input">
-                                <input
-                                    autoFocus
-                                    value={form.name}
-                                    onChange={e => setForm(f => ({ ...f, name: e.target.value.toUpperCase().replace(/\s/g, '_') }))}
-                                    className="w-full text-xl font-black uppercase tracking-widest placeholder-slate-800"
-                                    placeholder="MISSION_CODNAME..."
-                                />
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within/input:text-indigo-500 transition-colors">
-                                    <Target size={24} />
-                                </div>
-                            </div>
+                            <label style={{ display: 'block', fontSize: '10px', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' }}>Identifier</label>
+                            <input
+                                value={form.name}
+                                onChange={e => setForm(f => ({ ...f, name: e.target.value.toUpperCase().replace(/\s/g, '_') }))}
+                                style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px', color: 'white', fontSize: '16px', fontWeight: 700 }}
+                            />
                         </div>
 
-                        {/* Configuration Grid */}
-                        <div className="grid grid-cols-2 gap-5">
-                            <div className="bg-white/5 rounded-[2rem] p-6 border border-white/5 hover:border-white/10 transition-all group">
-                                <label>Protocol Duration</label>
-                                <div className="flex items-end gap-2 my-2 relative z-10">
-                                    <input
-                                        type="number"
-                                        value={form.duration}
-                                        onChange={e => setForm(f => ({ ...f, duration: parseInt(e.target.value) || 1 }))}
-                                        className="!bg-transparent !border-none !p-0 text-4xl font-black text-white outline-none w-20 !shadow-none"
-                                    />
-                                    <span className="text-[10px] font-black text-slate-600 uppercase mb-2 tracking-widest">Cycles</span>
-                                </div>
-                                <div className="flex gap-2.5 mt-4">
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '1.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <label style={{ fontSize: '9px', fontWeight: 900, color: '#64748b', textTransform: 'uppercase' }}>Duration</label>
+                                <div style={{ fontSize: '24px', fontWeight: 900, color: 'white', margin: '8px 0' }}>{form.duration}D</div>
+                                <div style={{ display: 'flex', gap: '4px' }}>
                                     {[3, 7, 14].map(d => (
-                                        <button
-                                            key={d}
-                                            onClick={() => setForm(f => ({ ...f, duration: d }))}
-                                            className={`px-3 py-1.5 rounded-xl text-[9px] font-black transition-all ${form.duration === d ? "bg-orange-500/20 text-orange-400 border border-orange-500/30" : "bg-white/5 text-slate-500 hover:text-slate-300"}`}
-                                        >
-                                            {d}D
-                                        </button>
+                                        <button key={d} onClick={() => setForm(f => ({ ...f, duration: d }))} style={{ flex: 1, padding: '6px', fontSize: '10px', background: form.duration === d ? '#f97316' : 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '6px', color: 'white', fontWeight: 700 }}>{d}D</button>
                                     ))}
                                 </div>
-                                <div className="absolute -bottom-2 -right-2 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
-                                    <Clock size={80} />
-                                </div>
                             </div>
-
-                            <div className="bg-white/5 rounded-[2rem] p-6 border border-white/5 hover:border-white/10 transition-all group">
-                                <label>Target Yield</label>
-                                <div className="flex items-end gap-2 my-2 relative z-10">
-                                    <input
-                                        type="number"
-                                        value={form.minTargetXP}
-                                        onChange={e => setForm(f => ({ ...f, minTargetXP: parseInt(e.target.value) || 0 }))}
-                                        className="!bg-transparent !border-none !p-0 text-4xl font-black text-white outline-none w-28 !shadow-none"
-                                    />
-                                    <span className="text-[10px] font-black text-slate-600 uppercase mb-2 tracking-widest">XP</span>
-                                </div>
-                                <div className="flex gap-2.5 mt-4">
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '1.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <label style={{ fontSize: '9px', fontWeight: 900, color: '#64748b', textTransform: 'uppercase' }}>Target XP</label>
+                                <div style={{ fontSize: '24px', fontWeight: 900, color: 'white', margin: '8px 0' }}>{form.minTargetXP}</div>
+                                <div style={{ display: 'flex', gap: '4px' }}>
                                     {[100, 250, 500].map(x => (
-                                        <button
-                                            key={x}
-                                            onClick={() => setForm(f => ({ ...f, minTargetXP: x }))}
-                                            className={`px-3 py-1.5 rounded-xl text-[9px] font-black transition-all ${form.minTargetXP === x ? "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30" : "bg-white/5 text-slate-500 hover:text-slate-300"}`}
-                                        >
-                                            {x}
-                                        </button>
+                                        <button key={x} onClick={() => setForm(f => ({ ...f, minTargetXP: x }))} style={{ flex: 1, padding: '6px', fontSize: '10px', background: form.minTargetXP === x ? '#6366f1' : 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '6px', color: 'white', fontWeight: 700 }}>{x}</button>
                                     ))}
                                 </div>
-                                <div className="absolute -bottom-2 -right-2 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
-                                    <Zap size={80} />
-                                </div>
                             </div>
                         </div>
 
-                        {/* Risk Indicator */}
-                        <div className="bg-indigo-500/5 border border-indigo-500/10 p-5 rounded-[1.5rem] flex items-center gap-5 translate-y-2">
-                            <div className="bg-indigo-500/20 p-3 rounded-xl">
-                                <Trophy size={20} className="text-indigo-400" />
-                            </div>
-                            <div className="flex-1">
-                                <p className="text-[10px] text-slate-400 leading-relaxed font-bold uppercase tracking-wider">
-                                    High-intensity protocol active. Failure to reach target yield will impact <span className="text-indigo-400">Neutral Stability (LP)</span>.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Launch Button */}
                         <button
                             onClick={handleSubmit}
-                            className="premium-btn w-full !rounded-[2rem] !py-6 shadow-[0_20px_50px_-15px_rgba(233,84,32,0.3)] flex items-center justify-center gap-4 group mt-4 overflow-hidden"
-                            style={{ background: 'linear-gradient(135deg, #E95420, #772953)' }}
+                            style={{
+                                width: '100%',
+                                padding: '20px',
+                                borderRadius: '1.5rem',
+                                fontSize: '12px',
+                                marginTop: '16px',
+                                background: 'linear-gradient(135deg, #E95420, #772953)',
+                                color: 'white',
+                                fontWeight: 900,
+                                border: 'none',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
                         >
-                            <span className="relative z-10">INITIALIZE PROTOCOL</span>
-                            <ChevronRight size={24} className="group-hover:translate-x-2 transition-transform relative z-10" />
-                            <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 linear" />
+                            INITIALIZE PROTOCOL
+                            <ChevronRight size={20} style={{ marginLeft: '8px' }} />
                         </button>
                     </div>
                 </div>

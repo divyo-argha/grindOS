@@ -11,47 +11,47 @@ export function RatingBadge({ rating, showProgress = false, size = "md" }: Props
     const progress = getRatingProgressToNext(rating);
 
     const sizes = {
-        sm: "text-[10px] px-2 py-0.5 rounded-lg",
-        md: "text-xs px-3 py-1 rounded-xl",
-        lg: "text-sm px-4 py-1.5 rounded-2xl",
+        sm: { fontSize: '10px', padding: '4px 10px', borderRadius: '8px' },
+        md: { fontSize: '12px', padding: '6px 14px', borderRadius: '10px' },
+        lg: { fontSize: '14px', padding: '8px 20px', borderRadius: '12px' },
     };
 
     return (
-        <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 group">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span
-                    className={`font-black uppercase tracking-widest border shadow-sm transition-all group-hover:shadow-lg ${sizes[size]}`}
                     style={{
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        border: `1px solid ${rank.color}44`,
                         color: rank.color,
-                        borderColor: `${rank.color}33`,
-                        background: `${rank.color}08`,
-                        boxShadow: `0 0 10px ${rank.color}11`
+                        background: `${rank.color}11`,
+                        ...sizes[size]
                     }}
                 >
                     {rank.name}
                 </span>
-                <span className="text-slate-500 font-mono font-bold text-xs group-hover:text-slate-300 transition-colors uppercase tracking-widest">
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#475569' }}>
                     {rating} LP
                 </span>
             </div>
 
             {showProgress && (
-                <div className="w-full">
-                    <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Next Tier</span>
-                        <span className="text-[9px] font-black text-slate-400">{progress}%</span>
+                <div style={{ width: '100%' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '9px', fontWeight: 900, color: '#475569', textTransform: 'uppercase' }}>Next Tier</span>
+                        <span style={{ fontSize: '9px', fontWeight: 900, color: '#64748b' }}>{progress}%</span>
                     </div>
-                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden p-px border border-white/5">
+                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden' }}>
                         <div
-                            className="h-full rounded-full transition-all duration-1000 relative"
                             style={{
+                                height: '100%',
                                 width: `${progress}%`,
                                 backgroundColor: rank.color,
-                                boxShadow: `0 0 10px ${rank.color}44`
+                                borderRadius: '10px'
                             }}
-                        >
-                            <div className="absolute inset-0 bg-white/10 animate-pulse" />
-                        </div>
+                        />
                     </div>
                 </div>
             )}
